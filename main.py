@@ -50,14 +50,8 @@ events = get_events(cfg['location']['lat'],
                     cfg['location']['radius'],
                     "LIVE",
                     datetime.datetime.now(),
-                    datetime.datetime.now() + datetime.timedelta(days=100))
+                    datetime.datetime.now() + datetime.timedelta(days=cfg['timescale']))
 
-events += get_events(cfg['location']['lat'],
-                    cfg['location']['long'],
-                    cfg['location']['radius'],
-                    "FEST",
-                    datetime.datetime.now(),
-                    datetime.datetime.now() + datetime.timedelta(days=100))
 
 to_add = []
 

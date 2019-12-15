@@ -27,6 +27,7 @@ location:
   lat: The latitude of the target
   long: The longitude of the target
   radius: The search radius
+timescale: Timescale to search for gigs in
 ```
 
 Run

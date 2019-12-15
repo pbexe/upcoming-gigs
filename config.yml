@@ -6,3 +6,4 @@ location:
   lat: 51.481583
   long: -3.179090
   radius: 10
+timescale: 100
