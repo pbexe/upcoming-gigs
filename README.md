@@ -18,7 +18,7 @@ export SKIDDLE_API='your-skiddle-api-key'
 ```
 
 Update the config file:
-``yaml
+`'`yaml
 username: Your Username
 playlist: URI of the playlist you want to use
 scope:
