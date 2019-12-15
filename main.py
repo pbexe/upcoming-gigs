@@ -32,9 +32,25 @@ def get_events(lat, long, rad, eventcode="LIVE", start_date=datetime.datetime.no
 
 
 
-events = get_events(51.481583, -3.179090, 10, "LIVE", datetime.datetime.now(), datetime.datetime.now() + datetime.timedelta(days=100))
+events = get_events(51.481583,
+                    -3.179090,
+                    10,
+                    "LIVE",
+                    datetime.datetime.now(),
+                    datetime.datetime.now() + datetime.timedelta(days=100))
 to_add = []
-spotify = spotipy.Spotify(auth=util.prompt_for_user_token('milesbudden4','playlist-modify-public user-read-private playlist-modify-private playlist-read-private'))
+spotify = spotipy.Spotify(auth=util.prompt_for_user_token('milesbudden4',
+                                                          'playlist-modify-public user-read-private playlist-modify-private playlist-read-private'))
+
+playlist = spotify.user_playlist('milesbudden4',
+                                 'spotify:playlist:65VgQko1QxehfdiI6rcfKn')
+uris = []
+for track in playlist["tracks"]["items"]:
+    uris.append(track["track"]["uri"])
+
+spotify.user_playlist_remove_all_occurrences_of_tracks('milesbudden4',
+                                                       'spotify:playlist:65VgQko1QxehfdiI6rcfKn',
+                                                       uris)
 if events:
     for event in events:
         result = spotify.artist(event)
@@ -44,7 +60,9 @@ if events:
         for track in response['tracks'][:3]:
             print("- ", track['name'])
             to_add.append(track['uri'])
-        spotify.user_playlist_add_tracks('milesbudden4', 'spotify:playlist:65VgQko1QxehfdiI6rcfKn', to_add)
+        spotify.user_playlist_add_tracks('milesbudden4',
+                                         'spotify:playlist:65VgQko1QxehfdiI6rcfKn',
+                                         to_add)
         to_add = []
 
 else:
