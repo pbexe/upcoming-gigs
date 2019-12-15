@@ -9,7 +9,8 @@ import yaml
 with open("config.yml", 'r') as ymlfile:
     cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
 
-print(" ".join(cfg['scope']))
+spotify = spotipy.Spotify(auth=util.prompt_for_user_token(cfg['username'],
+                                                          " ".join(cfg['scope'])))
 
 def get_events(lat, long, rad, eventcode="LIVE", start_date=datetime.datetime.now(), stop_date=datetime.datetime.now()+datetime.timedelta(days=10), description=1, limit=100):
     r = requests.get("https://www.skiddle.com/api/v1/events/search/",
@@ -33,6 +34,12 @@ def get_events(lat, long, rad, eventcode="LIVE", start_date=datetime.datetime.no
             for artist in result["artists"]:
                 if artist["spotifyartisturl"]:
                     artists.append(artist["spotifyartisturl"])
+                else:
+                    results = spotify.search(q='artist:' + artist["name"], type='artist')
+                    items = results['artists']['items']
+                    if len(items) > 0:
+                        artist_spotify = items[0]
+                        artists.append(artist_spotify['uri'])
         return artists
     return None
 
@@ -53,8 +60,6 @@ events += get_events(cfg['location']['lat'],
                     datetime.datetime.now() + datetime.timedelta(days=100))
 
 to_add = []
-spotify = spotipy.Spotify(auth=util.prompt_for_user_token(cfg['username'],
-                                                          " ".join(cfg['scope'])))
 
 playlist = spotify.user_playlist(cfg['username'],
                                  cfg['playlist'])
